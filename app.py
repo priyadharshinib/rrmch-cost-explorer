@@ -2,6 +2,7 @@
 from pathlib import Path
 
 import streamlit as st
+from PIL import Image
 import streamlit.components.v1 as components
 from supabase import create_client
 
@@ -10,11 +11,12 @@ from core import build_html, image_data_uri, load_report_data, user_initial
 BASE = Path(__file__).parent
 TEMPLATE = BASE / "templates" / "explorer.html"
 LOGO = BASE / "assets" / "asase_logo.png"
+FAVICON = BASE / "assets" / "favicon.png"   # browser-tab icon (lens); replace this file to change it
 APP_TITLE = "Solar EPC · Project Cost Explorer"
 
 st.set_page_config(
     page_title=f"{APP_TITLE} | Asase Energy",
-    page_icon="☀️",
+    page_icon=Image.open(FAVICON),
     layout="wide",
     initial_sidebar_state="collapsed",
 )

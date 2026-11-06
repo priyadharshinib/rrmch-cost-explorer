@@ -133,3 +133,15 @@ def test_wide_layout_single_line_title_and_avatar_room(template):
     assert "max-width:22ch" not in template                      # title no longer forced to wrap
     assert "@media (min-width:1200px){h1{white-space:nowrap}}" in template
     assert ".bb{padding-right:76px}" in template                 # space for the avatar after the header text
+
+
+def test_favicon_is_a_square_png_and_used_by_the_app():
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent
+    fav = root / "assets" / "favicon.png"
+    data = fav.read_bytes()
+    assert data[:8] == b"\x89PNG\r\n\x1a\n"
+    w, h = int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+    assert w == h >= 64
+    src = (root / "app.py").read_text(encoding="utf-8")
+    assert "page_icon=Image.open(FAVICON)" in src and "☀" not in src
